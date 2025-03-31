@@ -6,7 +6,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-const replicateApiToken = import.meta.env.VITE_FIREBASE_API_KEY;
+const replicateApiToken = import.meta.env.VITE_REPLICATE_API_KEY;
 
 function UploadPage() {
   const [imageFile, setImageFile] = useState(null);
