@@ -6,6 +6,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+const apiUrl = import.meta.env.VITE_PROXY_API_URL;
 const replicateApiToken = import.meta.env.VITE_REPLICATE_API_KEY;
 
 function UploadPage() {
@@ -70,23 +71,25 @@ function ResultPage() {
   const [styledImage, setStyledImage] = useState(null);
   const uploadedImage = localStorage.getItem("uploadedImage");
 
+  console.log("🧪 Base64 image enviada:", uploadedImage.slice(0, 100));
+
   React.useEffect(() => {
     const generateImage = async () => {
       try {
-        const response = await fetch(
-          "https://ghibli-proxy-2dc32d509-flavioricardo91.vercel.app/api/replicate",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            version:
+              "a9758cb889b34690a10fca3d83b2b10fcdb64f0937c7348b843c1302885e5924",
+            input: {
+              image: uploadedImage,
+              prompt: "a portrait in the style of Studio Ghibli",
             },
-            body: JSON.stringify({
-              version:
-                "a9758cb889b34690a10fca3d83b2b10fcdb64f0937c7348b843c1302885e5924",
-              input: { image: uploadedImage },
-            }),
-          }
-        );
+          }),
+        });
 
         const prediction = await response.json();
 
